@@ -1,0 +1,64 @@
+{% load poll_extras %}
+{% load static %}
+{% load sorl_thumbnail %}
+
+<div class="response-area" id="comments_area">
+    <h2>کامنت ها ({{ comments.count }})</h2>
+    <ul class="media-list">
+        {% for comment in comments %}
+            <li class="media" id="single_comment_box_{{ comment.id }}">
+                <a class="pull-right" href="#">
+                    {% if comment.user.avatar %}
+                        {% thumbnail comment.user.avatar "121x86" quality=100 crop='center' as im %}
+                            <img src="{% static im.url %}" alt="">
+                        {% endthumbnail %}
+                    {% else %}
+                        <img src="/static/images/blog/Customer.jpg">
+                    {% endif %}
+                </a>
+
+                <div class="media-body">
+                    <ul class="sinlge-post-meta">
+                        <li><i class="fa fa-user"></i>{{ comment.user }}</li>
+                        <li><i class="fa fa-clock-o"></i>{{ comment.create_date | time }}</li>
+                        <li><i class="fa fa-calendar"></i> {{ comment.create_date |date }}</li>
+                        {% if comment.user == request.user %}
+                            <li style="color: red" onclick="deleteComment({{ comment.id }})"><i class="fa fa-trash-o"></i> حذف</li>
+                        {% endif %}
+                    </ul>
+                    <p>{{ comment.text }}</p>
+                    <a class="btn btn-primary" onclick="fillParentId({{ comment.id }})"><i class="fa fa-reply"></i>پاسـخ</a>
+                </div>
+            </li>
+
+            {% if comment.articlecomment_set.all %}
+                {% for answer in comment.articlecomment_set.all %}
+                    <li class="media second-media" id="single_comment_box_{{ comment.id }}">
+                        <a class="pull-right" href="#">
+                            {% if answer.user.avatar %}
+                                {% thumbnail answer.user.avatar "121x86" quality=100 crop='center' as im %}
+                                    <img src="{% static im.url %}" alt="">
+                                {% endthumbnail %}
+                            {% else %}
+                                <img src="/static/images/blog/Customer.jpg">
+                            {% endif %}
+                        </a>
+                        <div class="media-body">
+                            <ul class="sinlge-post-meta">
+                                <li><i class="fa fa-user"></i>{{ answer.user }}</li>
+                                <li><i class="fa fa-clock-o"></i>{{ answer.create_date | time }}</li>
+                                <li><i class="fa fa-calendar"></i> {{ answer.create_date |date }}</li>
+                                {% if answer.user == request.user %}
+                                    <li style="color: red" onclick="deleteComment({{ answer.id }})"><i class="fa fa-trash-o"></i> حذف</li>
+                                {% endif %}
+                            </ul>
+                            <p>{{ answer.text }}</p>
+                            {#									    <a class="btn btn-primary" href=""><i class="fa fa-reply"></i>پاسـخ</a>#}
+                        </div>
+                    </li>
+                {% endfor %}
+
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>

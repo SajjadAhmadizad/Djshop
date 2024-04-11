@@ -1,0 +1,11 @@
+.errorlist {
+    padding-right: 0px !important;
+}
+
+.errorlist li {
+    color: red;
+}
+
+ul {
+    padding-right: 0;
+}

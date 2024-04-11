@@ -1,0 +1,247 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+{% load sorl_thumbnail %}
+{% load poll_extras %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-9">
+                    <div class="blog-post-area">
+                        <h2 class="title text-center">مقـاله شمـاره {{ article.pk }}</h2>
+                        <div class="single-blog-post">
+                            <h3>مقـاله شمـاره {{ article.id }}</h3>
+                            <input type="hidden" id="article-id" value="{{ article.id }}">
+                            <div class="post-meta">
+                                <ul>
+                                    <li><i class="fa fa-user"></i>نویسنده : {{ article.author }}</li>
+                                    <li><i class="fa fa-clock-o"></i> {{ article.get_jalali_create_time }}</li>
+                                    <li><i class="fa fa-calendar"></i> {{ article.get_jalali_create_date }}</li>
+                                </ul>
+                                <span>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star-half-o"></i>
+								</span>
+                            </div>
+                            <a href="">
+                                {% thumbnail article.image "862x398" quality=100 crop='center' as im %}
+                                    <img src="{% static im.url %}" alt="">
+                                {% endthumbnail %}
+                            </a>
+                            <p>{{ article.short_description }}</p>
+                            <p>{{ article.text }}</p>
+                            <div class="pager-area">
+                                <ul class="pager pull-left">
+                                    {% if previous_article %}
+                                        <li>
+                                            <a href="{% url 'articles_detail' slug=previous_article.get_absolute_url %}">قبلی</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if next_article %}
+                                        <li><a href="{% url 'articles_detail' slug=next_article.get_absolute_url %}">بعـدی</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--/blog-post-area-->
+
+                    <div class="rating-area">
+                        <ul class="ratings">
+                            <li class="rate-this">به این مطلب امتیـاز دهیـد :</li>
+                            <li>
+                                <i class="fa fa-star color"></i>
+                                <i class="fa fa-star color"></i>
+                                <i class="fa fa-star color"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </li>
+                            <li class="color">( 6 نظـر )</li>
+                        </ul>
+                        <ul class="tag">
+                            <li>برچسب :</li>
+                            <li><a class="color" href="">برچسب 1 <span>/</span></a></li>
+                            <li><a class="color" href="">برچسب 2 <span>/</span></a></li>
+                            <li><a class="color" href="">برچسب 3</a></li>
+                        </ul>
+                    </div><!--/rating-area-->
+
+                    <div class="socials-share">
+                        <a href=""><img src="/static/images/blog/socials.png" alt=""></a>
+                    </div><!--/socials-share-->
+
+                    <div class="media commnets">
+                        <a class="pull-right" href="#">
+                            {% if article.author.avatar %}
+                                {% thumbnail article.author.avatar "121x86" quality=100 crop='center' as im %}
+                                    <img src="{% static im.url %}" alt="">
+                                {% endthumbnail %}
+                            {% else %}
+                                <img src="/static/images/blog/Customer.jpg">
+                            {% endif %}
+                        </a>
+
+                        <div class="media-body">
+                            <h4 class="media-heading">نویسنده مقاله : {{ article.author }}</h4>
+                            <p>درباره نویسنده : {{ article.author.about_user }}</p>
+                            <div class="blog-socials">
+                                <ul>
+                                    <li><a href=""><i class="fa fa-facebook"></i></a></li>
+                                    <li><a href=""><i class="fa fa-twitter"></i></a></li>
+                                    <li><a href=""><i class="fa fa-dribbble"></i></a></li>
+                                    <li><a href=""><i class="fa fa-google-plus"></i></a></li>
+                                </ul>
+                                <a class="btn btn-primary" href="">سایـر مطالب نویسنده</a>
+                            </div>
+                        </div>
+                    </div><!--Comments-->
+
+
+                    {% include 'article_module/component/article_comments_component.html' %}
+
+
+                    <div class="replay-box" id="comment_form">
+                        {% if request.user.is_authenticated %}
+                            <div class="row">
+
+                                <div class="col-sm-12">
+                                    <h2>نظـر خود را بنویسیـد</h2>
+                                    <div class="text-area">
+
+                                        <input type="hidden" id="parent_id" value="">
+
+                                        <div class="blank-arrow">
+                                            <label>متن پیام</label>
+                                        </div>
+                                        <span>*</span>
+
+                                        {#<textarea id="commentText" name="message" oninput="sendArticleComment()" rows="11" ></textarea>#}
+                                        <textarea id="commentText" name="message" rows="11"></textarea>
+                                        <a class="btn btn-primary" onclick="sendArticleComment({{ article.pk }})">ارسـال
+                                            نظـر</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning">برای درج نظر باید <a
+                                    href="{% url 'login_page' %}?next={% url 'articles_detail' slug=article.slug %}">login</a> کنید
+                            </div>
+                        {% endif %}
+                    </div><!--/Repaly Box-->
+                </div>
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+                        <h2>دسته بندی محصولات</h2>
+                        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
+                                            <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                            دسته 1
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="sportswear" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <ul>
+                                            <li><a href="">محصول 1 </a></li>
+                                            <li><a href="">محصول 2 </a></li>
+                                            <li><a href="">محصول 3 </a></li>
+                                            <li><a href="">محصول 4</a></li>
+                                            <li><a href="">محصول 5</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordian" href="#mens">
+                                            <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                            دسته 2
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="mens" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <ul>
+                                            <li><a href="">محصول 1 </a></li>
+                                            <li><a href="">محصول 2 </a></li>
+                                            <li><a href="">محصول 3 </a></li>
+                                            <li><a href="">محصول 4</a></li>
+                                            <li><a href="">محصول 5</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a href="#">محصول 1</a></h4>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a href="#">محصول 2</a></h4>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a href="#">محصول 3</a></h4>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a href="#">محصول 4</a></h4>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a href="#">محصول 5</a></h4>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a href="#">محصول 6</a></h4>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a href="#">محصول 7</a></h4>
+                                </div>
+                            </div>
+                        </div><!--/category-productsr-->
+
+                        <div class="brands_products"><!--brands_products-->
+                            <h2>برنـد ها</h2>
+                            <div class="brands-name">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li><a href=""> <span class="pull-left">(50)</span>برنـد 1</a></li>
+                                    <li><a href=""> <span class="pull-left">(56)</span>برنـد 2</a></li>
+                                    <li><a href=""> <span class="pull-left">(27)</span>برنـد 3</a></li>
+                                    <li><a href=""> <span class="pull-left">(32)</span>برنـد 4</a></li>
+                                    <li><a href=""> <span class="pull-left">(5)</span>برنـد 5</a></li>
+                                </ul>
+                            </div>
+                        </div><!--/brands_products-->
+
+                        <div class="shipping text-center"><!--shipping-->
+                            <img src="/static/images/home/shipping.jpg" alt="">
+                        </div><!--/shipping-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

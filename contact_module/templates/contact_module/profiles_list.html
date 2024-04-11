@@ -1,0 +1,15 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+
+{% block title %}
+    لیست تصاویر
+{% endblock %}
+
+{% block content %}
+    <ul>
+    {% for profile in profiles %}
+        <li style="width:225px ; height:225px ; display:inline-block " ><img src="{% static profile.image.url %}"></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

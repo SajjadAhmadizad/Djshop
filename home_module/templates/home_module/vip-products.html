@@ -1,0 +1,66 @@
+{% extends 'shared/_layout.html' %}
+
+{% block title %}
+    محصولِ فوق العاده ویژه
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <div class="row">
+                {% if request.user.is_vip %}
+                    <a href="">
+                        <img width="300px" src="/static/1688388769423.jpg">
+                    </a>
+                    <p style="color: #ac2925">کون میدم.اگر هم اکنون تماس بگیرید شامل 50% تخفیف و یک ساک پرتف و مجلسی
+                        خواهید شد</p>
+                    <P>0993-970-3402</P>
+
+                {% else %}
+                    <p class="alert alert-warning">محصولی یافت نشد</p>
+                {% endif %}
+                <div class="col-sm-9">
+                    <div class="blog-post-area">
+
+                        {% if date %}
+                            تاریخ عضویت شما در وبسایت : {{ date }}
+                        {% endif %}
+                        {% for article in articles %}
+                            <div class="single-blog-post">
+                                <h3></h3>
+                                <div class="post-meta">
+                                    {% if request.user.is_vip %}
+                                        <a href="">
+                                            <img src="/static/1688388769423.jpg">
+                                        </a>
+                                    {% else %}
+                                        <p class="alert alert-warning">محصولی یافت نشد</p>
+                                    {% endif %}
+
+
+                                    <span>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star-half-o"></i>
+								</span>
+                                </div>
+
+                                <a class="btn btn-primary"></a>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}

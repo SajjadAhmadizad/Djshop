@@ -1,0 +1,28 @@
+<form id="main-contact-form" class="contact-form row" name="contact-form" method="post">
+
+    {% csrf_token %}
+    <div class="form-group col-md-6">
+        {#        {{ form.email.label_tag }}#}
+        {{ form.email }}
+        {{ form.email.errors }}
+    </div>
+    <div class="form-group col-md-6">
+        {#        {{ form.full_name.label_tag }}#}
+        {{ form.full_name }}
+        {{ form.full_name.errors }}
+    </div>
+    <div class="form-group col-md-12">
+        {#        {{ form.subject.label_tag }}#}
+        {{ form.subject }}
+        {{ form.subject.errors }}
+    </div>
+    <div class="form-group col-md-12">
+        {#        {{ form.text.label_tag }}#}
+        {{ form.text }}
+        {{ form.text.errors }}
+    </div>
+</form>
+<button type="submit" class="btn btn-primary pull-right" onclick="check_inputs()">
+    ارسال
+</button>
+

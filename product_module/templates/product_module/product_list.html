@@ -1,0 +1,121 @@
+{% extends 'shared/_layout.html' %}
+{% load render_partial %}
+{% load static %}
+
+{% block title %}
+    لیست محصولات
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-9 padding-right">
+
+
+                    {% if products %}
+                        <div class="features_items"><!--features_items-->
+                            <h2 class="title text-center">محصولات</h2>
+
+                            {% for product in products %}
+                                {% include 'includes/product_item_partial.html' %}
+                            {% endfor %}
+                            <div class="clearfix"></div>
+                            <ul class="pagination">
+
+{#                                {% if page_obj.has_previous %}#}
+{#                                    <li><a href="?page={{ page_obj.previous_page_number }}&start_price={{ start_price }}&end_price={{ end_price }}">قبلی</a></li>#}
+{#                                {% endif %}#}
+{##}
+{#                                {% for pageNumber in paginator.page_range %}#}
+{#                                    <li class="{% if page_obj.number == pageNumber %} active {% endif %}"><a#}
+{#                                            href="?page={{ pageNumber }}">{{ pageNumber }}</a></li>#}
+{#                                {% endfor %}#}
+{##}
+{#                                {% if page_obj.has_next %}#}
+{#                                    <li><a href="?page={{ page_obj.next_page_number }}">بعدی</a></li>#}
+{#                                {% endif %}#}
+
+                                {% if page_obj.has_previous %}
+                                    <li><a onclick="fillPage({{ page_obj.previous_page_number }})">قبلی</a></li>
+                                {% endif %}
+
+                                {% for pageNumber in paginator.page_range %}
+                                    <li class="{% if page_obj.number == pageNumber %} active {% endif %}"><a
+                                            onclick="fillPage({{ pageNumber }})">{{ pageNumber }}</a></li>
+                                {% endfor %}
+
+                                {% if page_obj.has_next %}
+                                    <li><a onclick="fillPage({{ page_obj.next_page_number }})">بعدی</a></li>
+                                {% endif %}
+
+                            </ul>
+                        </div><!--features_items-->
+
+                    {% else %}
+
+                        <div class="alert alert-warning">هیچ محصولی یافت نشد!</div>
+
+                    {% endif %}
+
+
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+
+
+                        {% render_partial 'product_module.views.product_categories_component' %}
+                        {% render_partial 'product_module.views.product_brands_component' %}
+
+
+                           <div class="price-range"><!--price-range-->
+							<h2>فیلتـر قیمـت</h2>
+
+							<div class="well">
+								 <input
+                                         type="text"
+                                         class="span2"
+                                         value="{{ start_price }},{{ end_price }}"
+                                         data-slider-min="0"
+                                         data-slider-max={{ db_max_price }}
+                                         data-slider-step="10000"
+                                         data-slider-value="[{{ start_price }},{{ end_price }}]"
+                                         id="sl2"
+                                 ><br/>
+								 <b>0</b><b class="pull-left">{{ db_max_price }}</b>
+							</div>
+						</div><!--/price-range-->
+                        <div>
+                            <form action="" method="get" id="filter_form">
+                                <input type="hidden" id="page" name="page" value="{{ page_obj.number }}">
+                                <input type="hidden" id="start_price" name="start_price" value="{{ start_price }}">
+                                <input type="hidden" id="end_price" name="end_price" value="{{ end_price }}">
+                            </form>
+                                <button class="btn btn-success btn-block" onclick="filterProducts()">فیلتر</button>
+                        </div>
+
+{#                        <form method="get" action="">#}
+{#                            <input type="hidden" name="sajjad" value="sajjad12">#}
+{#                            <input type="hidden" name="ahmadizad" value="{{ end_price }}">#}
+{#                            <button>hello</button>#}
+{#                        </form>#}
+
+
+                        {% if banners %}
+                            <div class="shipping text-center"><!--shipping-->
+                            {% for banner in banners %}
+                                <a href="{{ banner.url }}">
+                                    <img src="{% static banner.image %}">
+                                </a>
+                            {% endfor %}
+                            </div><!--/shipping-->
+                        {% endif %}
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}

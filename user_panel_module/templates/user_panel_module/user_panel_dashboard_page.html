@@ -1,0 +1,23 @@
+{% extends 'shared/_layout.html' %}
+{% load render_partial %}
+{% load static%}
+
+{% block title %}
+    پنل کاربری
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+{#                <img style="width: 100%" src="{% static current_user.avatar %}">#}
+                {% render_partial 'user_panel_module.views.user_panel_menu_component' %}
+            </div>
+            <div class="col-md-8">
+                <p>
+                    this is user dashboard
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

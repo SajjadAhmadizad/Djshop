@@ -1,0 +1,40 @@
+{% load static %}
+{% load sorl_thumbnail %}
+{% load poll_extras %}
+<div class="col-sm-4">
+    <div class="product-image-wrapper">
+        <div class="single-products">
+            <div class="productinfo text-center">
+                {% if product.image %}
+                    {% thumbnail product.image "268x250" crop='center' as im %}
+                        <img src="{% static im.url %}" alt="">
+                    {% endthumbnail %}
+                    {#                    <img src="{% static product.image.url %}" alt="">#}
+                {% else %}
+                    <img src="/static/images/shop/product.jpg">
+                {% endif %}
+                <h2>{{ product.title }}</h2>
+                <h2>{{ product.price|three_digits_currency }}</h2>
+
+                <p>{{ product.short_description }} </p>
+                <a onclick="addProductToOrder({{ product.id }})" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد</a>
+            </div>
+            <div class="product-overlay">
+                <div class="overlay-content">
+                    {#                    <img src="{% static product.image.url %}" alt="">#}
+                    <h2>{{ product.title }}</h2>
+                    <h2>{{ product.price|three_digits_currency }}</h2>
+                    <p>{{ product.short_description }}</p>
+                    <a onclick="addProductToOrder({{ product.id }})" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبـد
+                        خریـد</a>
+                </div>
+            </div>
+        </div>
+        <div class="choose">
+            <ul class="nav nav-pills nav-justified">
+                <li><a href="{{ product.get_absolute_url }}"><i class="fa fa-plus-square"></i>جزییات محصول</a></li>
+                <li><a href=""><i class="fa fa-plus-square"></i>مقایسه</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
